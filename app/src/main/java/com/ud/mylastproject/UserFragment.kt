@@ -2,6 +2,7 @@ package com.ud.mylastproject
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,48 +14,44 @@ import com.ud.mylastproject.databinding.FragmentUserBinding
 
 class UserFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    lateinit var binding:FragmentUserBinding
+    private lateinit var binding: FragmentUserBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding=FragmentUserBinding.inflate(inflater,container,false)
-
-        val name=arguments?.getString("name")
-        binding.name.text = name.toString()
-
-        val phone=arguments?.getString("phone")
-        binding.phone.text = phone.toString()
-
-        val email=arguments?.getString("email")
-        binding.emailLog.text = email.toString()
-
-       return binding.root//inflater.inflate(R.layout.fragment_user, container, false)
+        binding = FragmentUserBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {//added
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.logout.setOnClickListener{
-            binding.name.text=""
-            binding.phone.text=""
-            binding.emailLog.text=""
-            requireActivity().run{
+        sharedPreferences = requireActivity().getSharedPreferences("login", Context.MODE_PRIVATE)
+
+        val name = sharedPreferences.getString("name", "")
+        val phone = sharedPreferences.getString("phone", "")
+        val email = sharedPreferences.getString("email", "")
+
+        binding.name.text = name
+        binding.phone.text = phone
+        binding.emailLog.text = email
+
+        binding.logout.setOnClickListener {
+            clearSharedPreferences()
+            requireActivity().run {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }
-
     }
 
-
-
+    private fun clearSharedPreferences() {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
 
     companion object {
         @JvmStatic
