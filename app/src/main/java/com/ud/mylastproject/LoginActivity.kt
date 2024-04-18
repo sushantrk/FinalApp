@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Fetch additional user data from Firestore
         val firestore = FirebaseFirestore.getInstance()
-        val userDocRef = firestore.collection("users").document(email)
+        val userDocRef = firestore.collection("USERS").document(email)
         userDocRef.get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
