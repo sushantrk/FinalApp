@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             when (it.itemId) {
                 R.id.nav_map -> {
-                    inflateFragment(MapFragment.newInstance())
+                    inflateFragment(MapsFragment())
                 }
 
                 R.id.nav_home -> {
